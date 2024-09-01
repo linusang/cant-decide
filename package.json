@@ -9,7 +9,8 @@
     "prettier": "bunx prettier --write .",
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "vitest": "vitest run",
-    "vitest:watch": "vitest"
+    "vitest:watch": "vitest",
+    "deploy": "vue-tsc --noEmit && bunx --bun vite build && bunx wrangler pages publish dist --project-name=cant-decide --branch=main"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
