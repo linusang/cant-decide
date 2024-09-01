@@ -10,12 +10,13 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "types": ["unplugin-icons/types/vue"],
+    "types": ["unplugin-icons/types/vue", "vite-plugin-pwa/client"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "./src/@types", "./src/vendor"]
   },
   "include": [
     "src/**/*.ts",
