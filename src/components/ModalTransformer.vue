@@ -1,9 +1,110 @@
+<script setup lang="ts">
+  import anime from "animejs";
+  import { nextTick, ref, watchEffect } from "vue";
+
+  import type { ContainerTransformParams } from "@/plugins/containerTransform";
+
+  import ContainerTransformer from "./ContainerTransformer.vue";
+  import MaskedOverflow from "./MaskedOverflow.vue";
+  import type { ModalOptions } from "./ModalApi";
+
+  const props = withDefaults(
+    defineProps<{
+      options: ModalOptions;
+      hideHeader?: boolean;
+      hideFooter?: boolean;
+    }>(),
+    {
+      hideHeader: false,
+      hideFooter: false,
+    }
+  );
+
+  const emit = defineEmits<{
+    "is-opened": [boolean];
+    "before-open": [];
+    "after-opened": [];
+    "before-close": [];
+    "after-closed": [];
+  }>();
+
+  const isOpened = ref<boolean>(false);
+  const bodyFlexGrow = ref<boolean>(props.options?.bodyFlexGrow || false);
+  const bodyOverflowAuto = ref<boolean>(
+    props.options?.bodyOverflowAuto || false
+  );
+  const backdrop = ref<HTMLElement>();
+  const containerTransformer = ref<InstanceType<typeof ContainerTransformer>>();
+
+  function animateOpacityTo(element: HTMLElement, value: number) {
+    const promise = new Promise<void>((resolve) => {
+      anime({
+        targets: element,
+        opacity: value,
+        duration: 300,
+        easing: "linear",
+        complete: () => resolve(),
+      });
+    });
+    return promise;
+  }
+
+  function fadeInBackdrop() {
+    if (!backdrop.value) return Promise.resolve();
+    return animateOpacityTo(backdrop.value, 1);
+  }
+
+  function fadeOutBackdrop() {
+    if (!backdrop.value) return Promise.resolve();
+    return animateOpacityTo(backdrop.value, 0);
+  }
+
+  async function open(params: ContainerTransformParams) {
+    isOpened.value = true;
+    await nextTick();
+
+    if (!containerTransformer.value) {
+      throw "containerTransformer required";
+    }
+
+    const transformer = containerTransformer.value;
+
+    emit("before-open");
+    const p1 = fadeInBackdrop();
+    const p2 = transformer.performEntranceTransition(params);
+    await Promise.all([p1, p2]);
+    emit("after-opened");
+  }
+
+  async function close(params: ContainerTransformParams) {
+    if (!containerTransformer.value) {
+      throw "containerTransformer required";
+    }
+    const transformer = containerTransformer.value;
+    emit("before-close");
+    const p1 = fadeOutBackdrop();
+    const p2 = transformer.performExitTransition(params);
+    await Promise.all([p1, p2]);
+    isOpened.value = false;
+    emit("after-closed");
+  }
+
+  watchEffect(() => emit("is-opened", isOpened.value));
+
+  defineExpose({
+    open,
+    close,
+  });
+</script>
+
 <template>
   <!-- set z index to 2 because swiper-wrapper has z-index set to 1 -->
-  <div class="fixed inset-0 w-full h-full" style="z-index: 2" v-if="isOpened">
-    <div class="relative w-full h-full">
-      <div class="absolute w-full h-full backdrop" ref="backdrop"></div>
-      <div class="absolute flex items-center justify-center w-full h-full p-3">
+  <div v-if="isOpened" class="fixed inset-0 h-full w-full" style="z-index: 2">
+    <div class="relative flex h-full w-full items-center justify-center">
+      <div ref="backdrop" class="backdrop absolute h-full w-full"></div>
+      <div
+        class="absolute flex h-full w-full items-center justify-center p-3 sm:max-w-120"
+      >
         <ContainerTransformer
           v-bind="$attrs"
           ref="containerTransformer"
@@ -12,7 +113,7 @@
         >
           <div
             v-if="!hideHeader"
-            class="px-8 py-4 rounded-t-lg bg-catalina-blue-600"
+            class="rounded-t-lg bg-catalina-blue-600 px-8 py-4"
           >
             <slot name="header"></slot>
           </div>
@@ -25,13 +126,13 @@
               'overflow-auto': bodyOverflowAuto,
             }"
           >
-            <MaskedOverflow class="text-chetwode-blue-500 h-full">
+            <MaskedOverflow class="h-full text-chetwode-blue-500">
               <slot></slot>
             </MaskedOverflow>
           </div>
           <div
             v-if="!hideFooter"
-            class="px-8 py-4 rounded-b-lg bg-catalina-blue-600"
+            class="rounded-b-lg bg-catalina-blue-600 px-8 py-4"
           >
             <slot name="footer"></slot>
           </div>
@@ -42,116 +143,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { ContainerTransformParams } from "@/plugins/containerTransform";
-import { defineComponent, PropType, ref, watchEffect, nextTick } from "vue";
-import ContainerTransformer from "./ContainerTransformer.vue";
-import MaskedOverflow from "./MaskedOverflow.vue";
-import { ModalOptions } from "./ModalApi";
-import anime from "animejs";
-
-export default defineComponent({
-  components: {
-    ContainerTransformer,
-    MaskedOverflow,
-  },
-  inheritAttrs: false,
-  props: {
-    options: {
-      type: Object as PropType<ModalOptions>,
-    },
-    hideHeader: {
-      type: Boolean,
-      default: false,
-    },
-    hideFooter: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: [
-    "is-opened",
-    "before-open",
-    "after-opened",
-    "before-close",
-    "after-closed",
-  ],
-  setup(props, { emit }) {
-    const isOpened = ref<boolean>(false);
-    const bodyFlexGrow = ref<boolean>(props.options?.bodyFlexGrow || false);
-    const bodyOverflowAuto = ref<boolean>(
-      props.options?.bodyOverflowAuto || false
-    );
-    const backdrop = ref<HTMLElement>();
-    const containerTransformer = ref<
-      InstanceType<typeof ContainerTransformer>
-    >();
-
-    function animateOpacityTo(element: HTMLElement, value: number) {
-      const promise = new Promise<void>((resolve) => {
-        anime({
-          targets: element,
-          opacity: value,
-          duration: 300,
-          easing: "linear",
-          complete: () => resolve(),
-        });
-      });
-      return promise;
-    }
-
-    function fadeInBackdrop() {
-      if (!backdrop.value) return Promise.resolve();
-      return animateOpacityTo(backdrop.value, 1);
-    }
-
-    function fadeOutBackdrop() {
-      if (!backdrop.value) return Promise.resolve();
-      return animateOpacityTo(backdrop.value, 0);
-    }
-
-    async function open(params: ContainerTransformParams) {
-      isOpened.value = true;
-      await nextTick();
-
-      if (!containerTransformer.value) {
-        throw "containerTransformer required";
-      }
-
-      const transformer = containerTransformer.value;
-
-      emit("before-open");
-      const p1 = fadeInBackdrop();
-      const p2 = transformer.performEntranceTransition(params);
-      await Promise.all([p1, p2]);
-      emit("after-opened");
-    }
-
-    async function close(params: ContainerTransformParams) {
-      if (!containerTransformer.value) {
-        throw "containerTransformer required";
-      }
-      const transformer = containerTransformer.value;
-      emit("before-close");
-      const p1 = fadeOutBackdrop();
-      const p2 = transformer.performExitTransition(params);
-      await Promise.all([p1, p2]);
-      isOpened.value = false;
-      emit("after-closed");
-    }
-
-    watchEffect(() => emit("is-opened", isOpened.value));
-
-    return {
-      isOpened,
-      open,
-      close,
-      bodyFlexGrow,
-      bodyOverflowAuto,
-      containerTransformer,
-      backdrop,
-    };
-  },
-});
-</script>

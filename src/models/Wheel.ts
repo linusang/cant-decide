@@ -1,4 +1,4 @@
-import Choice from "./Choice";
+import type Choice from "./Choice";
 
 export default interface Wheel {
   id: string;

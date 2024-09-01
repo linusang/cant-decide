@@ -9,6 +9,7 @@ export function usePwaInstaller(
     deferredPromptCallback(promptEvent);
   });
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // if (navigator.getInstalledRelatedApps) {
   //   navigator.getInstalledRelatedApps().then((relatedApps: InstalledApp[]) => {

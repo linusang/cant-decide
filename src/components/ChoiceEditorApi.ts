@@ -1,4 +1,4 @@
-import Choice from "@/models/Choice";
+import type Choice from "@/models/Choice";
 
 export interface OnMountedContext {
   choice: Choice;

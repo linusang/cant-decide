@@ -7,39 +7,39 @@ import ChevronRight from "./ChevronRight.vue";
 import ChevronUp from "./ChevronUp.vue";
 import Cross from "./Cross.vue";
 import DotsVertical from "./DotsVertical.vue";
+import Download from "./Download.vue";
+import HamburgerMenu from "./HamburgerMenu.vue";
+import Heart from "./Heart.vue";
+import HeartWithShadow from "./HeartWithShadow.vue";
+import Info from "./Info.vue";
+import IosShare from "./IosShare.vue";
 import Minus from "./Minus.vue";
 import Pencil from "./Pencil.vue";
 import Plus from "./Plus.vue";
+import Share from "./Share.vue";
 import Trash from "./Trash.vue";
 import WheelPointer from "./WheelPointer.vue";
-import HeartWithShadow from "./HeartWithShadow.vue";
-import Heart from "./Heart.vue";
-import HamburgerMenu from "./HamburgerMenu.vue";
-import Info from "./Info.vue";
-import Download from "./Download.vue";
-import Share from "./Share.vue";
-import IosShare from "./IosShare.vue";
 
 export {
-  Cross,
-  DotsVertical,
-  Pencil,
-  Plus,
-  WheelPointer,
-  Minus,
+  Check,
   ChevronDoubleLeft,
   ChevronDoubleRight,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
   ChevronUp,
-  Trash,
-  Check,
-  HeartWithShadow,
-  Heart,
-  HamburgerMenu,
-  Info,
+  Cross,
+  DotsVertical,
   Download,
+  HamburgerMenu,
+  Heart,
+  HeartWithShadow,
+  Info,
+  IosShare,
+  Minus,
+  Pencil,
+  Plus,
   Share,
-  IosShare
+  Trash,
+  WheelPointer,
 };

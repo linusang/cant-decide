@@ -1,16 +1,58 @@
+<script setup lang="ts">
+  import { ref } from "vue";
+
+  import { RoundedButton } from "./buttons";
+  import Icon from "./icons/Icon.vue";
+  import Modal from "./Modal.vue";
+
+  withDefaults(
+    defineProps<{
+      wheelTitle?: string;
+    }>(),
+    {
+      wheelTitle: "",
+    }
+  );
+
+  const emit = defineEmits<{
+    "confirm-remove-wheel": [];
+  }>();
+
+  const removeWheelModal = ref<InstanceType<typeof Modal> | undefined>();
+  function removeWheel() {
+    if (removeWheelModal.value) {
+      removeWheelModal.value.open();
+    }
+  }
+
+  function confirmRemoveWheel() {
+    emit("confirm-remove-wheel");
+  }
+
+  function closeModal() {
+    if (removeWheelModal.value) {
+      removeWheelModal.value.close();
+    }
+  }
+
+  defineExpose({
+    closeModal,
+  });
+</script>
+
 <template>
   <div>
     <button
-      class="flex items-center px-3 py-3 mx-auto text-red-600 hover:text-red-500 focus:outline-none"
+      class="mx-auto flex items-center px-3 py-3 text-red-600 hover:text-red-500 focus:outline-none"
       @click="removeWheel()"
     >
-      <Icon icon="Trash" class="w-6 h-6"></Icon>
+      <Icon icon="Trash" class="h-6 w-6"></Icon>
       <span class="ml-1 uppercase">Remove Wheel</span>
     </button>
     <teleport to="body">
-      <modal ref="removeWheelModal" class="sm:w-112">
+      <Modal ref="removeWheelModal" class="sm:w-112">
         <template #default>
-          <div class="p-8 text-3xl text-center text-white">
+          <div class="p-8 text-center text-3xl text-white">
             Are you sure you want to remove "{{ wheelTitle }}"?
           </div>
         </template>
@@ -32,59 +74,7 @@
             </div>
           </div>
         </template>
-      </modal>
+      </Modal>
     </teleport>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref } from "vue";
-import Modal from "./Modal.vue";
-import Icon from "./icons/Icon.vue";
-import { RoundedButton } from "./buttons";
-import { WheelRemoverApi } from "./WheelRemoverApi";
-
-export default defineComponent({
-  components: {
-    Modal,
-    Icon,
-    RoundedButton,
-  },
-  props: {
-    wheelTitle: {
-      type: String,
-      default: "",
-    },
-  },
-  emits: ["confirm-remove-wheel"],
-  setup(props, { emit }) {
-    const removeWheelModal = ref<InstanceType<typeof Modal> | undefined>();
-    function removeWheel() {
-      if (removeWheelModal.value) {
-        removeWheelModal.value.open();
-      }
-    }
-
-    function confirmRemoveWheel() {
-      emit("confirm-remove-wheel");
-    }
-
-    function closeModal() {
-      if (removeWheelModal.value) {
-        removeWheelModal.value.close();
-      }
-    }
-
-    const exposedApi: WheelRemoverApi = {
-      closeModal,
-    };
-
-    return {
-      removeWheelModal,
-      removeWheel,
-      confirmRemoveWheel,
-      ...exposedApi,
-    };
-  },
-});
-</script>

@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 export function useWheelSizer() {
   const container = ref<HTMLElement>();
@@ -10,8 +10,10 @@ export function useWheelSizer() {
       const width = container.value.getBoundingClientRect().width;
       const height = container.value.getBoundingClientRect().height;
       const paddingTop = getComputedStyle(container.value, null).paddingTop;
-      const paddingBottom = getComputedStyle(container.value, null)
-        .paddingBottom;
+      const paddingBottom = getComputedStyle(
+        container.value,
+        null
+      ).paddingBottom;
       size.value = `calc(${Math.min(
         width,
         height
@@ -35,6 +37,6 @@ export function useWheelSizer() {
 
   return {
     container,
-    size
+    size,
   };
 }

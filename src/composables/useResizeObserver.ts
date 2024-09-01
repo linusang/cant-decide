@@ -3,7 +3,7 @@ export const useResizeObserver = (el: HTMLElement, onResized: () => void) => {
     onResized();
   };
 
-  let resizeObserver = new ResizeObserver(resizedCallback);
+  const resizeObserver = new ResizeObserver(resizedCallback);
   resizeObserver.observe(el);
 
   const disconnect = () => {

@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "types": ["unplugin-icons/types/vue", "vite-plugin-pwa/client"],
+    "types": [],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

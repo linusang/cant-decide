@@ -1,4 +1,5 @@
-import { App } from "vue";
+import type { App } from "vue";
+
 import clickOutsideFunc from "./click-outside";
 
 export function registerDirectives(app: App) {

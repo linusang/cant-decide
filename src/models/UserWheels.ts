@@ -1,4 +1,4 @@
-import Wheel from "./Wheel";
+import type Wheel from "./Wheel";
 
 export default interface UserWheels {
   wheels: Wheel[];

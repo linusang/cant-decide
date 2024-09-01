@@ -1,4 +1,4 @@
-import Coord from "./Coord";
+import type Coord from "./Coord";
 
 export default interface SvgSlice<T> {
   data: T;

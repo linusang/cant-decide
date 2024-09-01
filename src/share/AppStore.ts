@@ -1,8 +1,10 @@
-import AppState from "@/models/AppState";
-import Wheel from "@/models/Wheel";
 import { computed } from "vue";
+
+import type AppState from "@/models/AppState";
+import type Wheel from "@/models/Wheel";
+
 import Store from "./Store";
-import UserWheelsStore from "./UserWheelsStore";
+import type UserWheelsStore from "./UserWheelsStore";
 
 export const APP_STORE = Symbol("AppStore");
 
@@ -18,7 +20,7 @@ export default class AppStore extends Store<AppState> {
     return {
       isWheelEditorOpened: false,
       currentWheelIndex: 0,
-      installPromptEvent: null
+      installPromptEvent: null,
     };
   }
 

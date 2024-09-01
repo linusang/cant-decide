@@ -1,4 +1,5 @@
-import anime, { AnimeInstance } from "animejs";
+import type { AnimeInstance } from "animejs";
+import anime from "animejs";
 
 const DefaultDuration = 500;
 const DefaultEasing = "easeOutCubic";
@@ -47,7 +48,7 @@ export function useContainerTransform(
       translateX,
       translateY,
       scaleX,
-      scaleY
+      scaleY,
     };
   }
 
@@ -57,14 +58,14 @@ export function useContainerTransform(
   ): Timings {
     return {
       duration: totalDuration * fraction,
-      delay: 0
+      delay: 0,
     };
   }
 
   function calcFadeInTimings(totalDuration: number, fraction: number): Timings {
     return {
       duration: totalDuration * fraction,
-      delay: totalDuration - totalDuration * fraction
+      delay: totalDuration - totalDuration * fraction,
     };
   }
 
@@ -80,14 +81,14 @@ export function useContainerTransform(
       srcRect,
       tgtRect
     );
-    const promise = new Promise<AnimeInstance>(resolve => {
+    const promise = new Promise<AnimeInstance>((resolve) => {
       anime({
         targets: tgtElement,
         duration,
         easing,
         translateX: [translateX, 0],
         translateY: [translateY, 0],
-        complete: resolve
+        complete: resolve,
       });
     });
     return promise;
@@ -104,12 +105,12 @@ export function useContainerTransform(
     const srcRect = srcElement.getBoundingClientRect();
     const bgRect = bgElement.getBoundingClientRect();
 
-    const promise = new Promise<AnimeInstance>(resolve => {
+    const promise = new Promise<AnimeInstance>((resolve) => {
       anime({
         targets: bgElement,
         borderRadius: [srcElementBorderRadius, bgElementBorderRadius],
         backgroundColor: {
-          value: [srcElementBackgroundColor, bgElementBackgroundColor]
+          value: [srcElementBackgroundColor, bgElementBackgroundColor],
         },
         translateX: [`${srcRect.x - bgRect.x}px`, "0"],
         translateY: [`${srcRect.y - bgRect.y}px`, "0"],
@@ -117,7 +118,7 @@ export function useContainerTransform(
         height: [`${srcRect.height}px`, `${bgRect.height}px`],
         duration,
         easing,
-        complete: resolve
+        complete: resolve,
       });
     });
 
@@ -142,7 +143,7 @@ export function useContainerTransform(
       fadeInDurationFraction
     );
 
-    const promise = new Promise<AnimeInstance>(resolve => {
+    const promise = new Promise<AnimeInstance>((resolve) => {
       anime({
         targets: contentElement,
         duration: totalDuration,
@@ -153,9 +154,9 @@ export function useContainerTransform(
           value: [0, 1],
           delay,
           duration: fadeInDuration,
-          easing: "linear"
+          easing: "linear",
         },
-        complete: resolve
+        complete: resolve,
       });
     });
     return promise;
@@ -171,7 +172,7 @@ export function useContainerTransform(
 
     anime.set(clonedElement, {
       translateX: srcPlaceholderRect.width / 2 - cloneRect.width / 2,
-      translateY: srcPlaceholderRect.height / 2 - cloneRect.height / 2
+      translateY: srcPlaceholderRect.height / 2 - cloneRect.height / 2,
     });
 
     const { duration: fadeOutDuration } = calcFadeOutTimings(
@@ -179,13 +180,13 @@ export function useContainerTransform(
       fadeOutDurationFraction
     );
 
-    const promise = new Promise<AnimeInstance>(resolve => {
+    const promise = new Promise<AnimeInstance>((resolve) => {
       anime({
         targets: clonedElement,
         opacity: 0,
         duration: fadeOutDuration,
         complete: resolve,
-        easing: "linear"
+        easing: "linear",
       });
     });
     return promise;
@@ -203,14 +204,14 @@ export function useContainerTransform(
       srcRect,
       tgtRect
     );
-    const promise = new Promise<AnimeInstance>(resolve => {
+    const promise = new Promise<AnimeInstance>((resolve) => {
       anime({
         targets: tgtElement,
         duration,
         easing,
         translateX: [0, translateX],
         translateY: [0, translateY],
-        complete: resolve
+        complete: resolve,
       });
     });
     return promise;
@@ -227,7 +228,7 @@ export function useContainerTransform(
     const srcRect = srcElement.getBoundingClientRect();
     const bgRect = bgElement.getBoundingClientRect();
 
-    const promise = new Promise<AnimeInstance>(resolve => {
+    const promise = new Promise<AnimeInstance>((resolve) => {
       anime({
         targets: bgElement,
         borderRadius: [bgElementBorderRadius, srcElementBorderRadius],
@@ -238,7 +239,7 @@ export function useContainerTransform(
         height: [`${bgRect.height}px`, `${srcRect.height}px`],
         duration,
         easing,
-        complete: resolve
+        complete: resolve,
       });
     });
     return promise;
@@ -261,7 +262,7 @@ export function useContainerTransform(
       totalDuration,
       fadeOutDurationFraction
     );
-    const promise = new Promise<AnimeInstance>(resolve => {
+    const promise = new Promise<AnimeInstance>((resolve) => {
       anime({
         targets: contentElement,
         duration: totalDuration,
@@ -271,9 +272,9 @@ export function useContainerTransform(
         opacity: {
           value: [1, 0],
           duration: fadeOutDuration,
-          easing: "linear"
+          easing: "linear",
         },
-        complete: resolve
+        complete: resolve,
       });
     });
     return promise;
@@ -289,7 +290,7 @@ export function useContainerTransform(
 
     anime.set(clonedElement, {
       translateX: srcPlaceHolderRect.width / 2 - cloneRect.width / 2,
-      translateY: srcPlaceHolderRect.height / 2 - cloneRect.height / 2
+      translateY: srcPlaceHolderRect.height / 2 - cloneRect.height / 2,
     });
 
     const { duration: fadeInDuration, delay } = calcFadeInTimings(
@@ -297,14 +298,14 @@ export function useContainerTransform(
       fadeInDurationFraction
     );
 
-    const promise = new Promise<AnimeInstance>(resolve => {
+    const promise = new Promise<AnimeInstance>((resolve) => {
       anime({
         targets: clonedElement,
         opacity: 1,
         duration: fadeInDuration,
         delay: delay,
         complete: resolve,
-        easing: "linear"
+        easing: "linear",
       });
     });
     return promise;
@@ -312,13 +313,13 @@ export function useContainerTransform(
 
   function setDisplayNone(element: HTMLElement) {
     anime.set(element, {
-      display: "none"
+      display: "none",
     });
   }
 
   function setDisplayBlock(element: HTMLElement) {
     anime.set(element, {
-      display: "block"
+      display: "block",
     });
   }
 
@@ -385,7 +386,7 @@ export function useContainerTransform(
 
     anime.set(bgElement, {
       width: "100%",
-      height: "100%"
+      height: "100%",
     });
     setDisplayNone(srcPlaceholderElement);
   }
@@ -445,7 +446,7 @@ export function useContainerTransform(
 
   return {
     performEntranceTransition,
-    performExitTransition
+    performExitTransition,
   };
 }
 

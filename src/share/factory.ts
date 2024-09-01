@@ -1,6 +1,7 @@
-import Choice from "@/models/Choice";
-import UserWheels from "@/models/UserWheels";
-import Wheel from "@/models/Wheel";
+import type Choice from "@/models/Choice";
+import type UserWheels from "@/models/UserWheels";
+import type Wheel from "@/models/Wheel";
+
 import { generateUniqueId } from "./utils/stringUtils";
 
 function createLunchWheel(): Wheel {

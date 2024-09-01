@@ -1,5 +1,6 @@
-import UserWheels from "@/models/UserWheels";
-import Wheel from "@/models/Wheel";
+import type UserWheels from "@/models/UserWheels";
+import type Wheel from "@/models/Wheel";
+
 import { createBucketListWheel, createSampleUserWheels } from "./factory";
 import Store from "./Store";
 import { generateUniqueId } from "./utils/stringUtils";
@@ -134,7 +135,7 @@ export default class UserWheelsStore extends Store<UserWheels> {
     }
   }
 
-  private removeCurrentWheelIndexIfPresent(data: {}) {
+  private removeCurrentWheelIndexIfPresent(data: object) {
     if (data) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (typeof (data as any).currentWheelIndex === undefined) {

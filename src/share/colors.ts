@@ -4,5 +4,5 @@ export const chromaColors: string[] = [
   "#355CED",
   "#F74785",
   "#FE9A5F",
-  "#FFDC85"
+  "#FFDC85",
 ];

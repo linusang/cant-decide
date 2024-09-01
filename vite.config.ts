@@ -3,10 +3,14 @@ import * as path from "path";
 import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vitest/config";
 import { VitePWA } from "vite-plugin-pwa";
+import tsconfigPaths from "vite-tsconfig-paths";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    vueDevTools(),
+    tsconfigPaths(),
     Vue(),
     Icons({ compiler: "vue3" }),
     VitePWA({
